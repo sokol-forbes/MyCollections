@@ -3,10 +3,10 @@ import java.lang.Exception;
 public class MyArrayList<T> {
     private int capatity = 10;
     private int size=0;
-    private Object[] obj;
+    private T[] obj;
 
     public MyArrayList() {
-        obj = new Object[capatity];
+        obj = (T[]) new Object[capatity];
         //size = 0;
     }
     public T get(int index){return (T) obj[index];}
@@ -53,10 +53,10 @@ public class MyArrayList<T> {
 
     private void enlargement() {
         capatity = (size * 3 / 2 + 1);
-        Object[] objInstance = new Object[capatity];
+        T[] objInstance = (T[])new Object[capatity];
         if (size >= 0)
             System.arraycopy(obj, 0, objInstance, 0, size);
-        this.obj = objInstance;
+        this.obj = (T[]) objInstance;
 
     }
 
