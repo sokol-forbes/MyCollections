@@ -1,3 +1,5 @@
+package Collections;
+
 public class MyNode<T> {
     private T value;
     private MyNode next,prev;

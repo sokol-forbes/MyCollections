@@ -1,3 +1,5 @@
+package Collections;
+
 /**
  * Собственная реализация LinkedList<T>
  *

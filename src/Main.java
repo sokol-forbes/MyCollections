@@ -1,61 +1,90 @@
-import java.util.Scanner;
+import Patterns.FactoryMethod.Logistic;
+import Patterns.Flyweight.Forest;
+import Patterns.Strategy.Order;
+import Patterns.Strategy.PayByCreditCard;
+import Patterns.Strategy.PayByQuvi;
+import Patterns.Strategy.PayStrategy;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
-        int number, index = 0, count;
-        MyArrayList<Integer> list = new MyArrayList<>();
-        System.out.println(list.size() + "\n" + "Введите количество чисел");
-        Scanner in = new Scanner(System.in);
-        count = in.nextInt();
-        for (int i = 1; i <= count; i++) {
-            try {
-                System.out.println("Введите "+i +" число");
-                number=in.nextInt();
-                list.add(number);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
+    static int TREES_TO_DRAW = 100;
+    static int TREE_TYPES = 2;
+    static int CANVAS_SIZE = 500;
+    private static Map<Integer, Integer> priceOnProducts = new HashMap<>();
+    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static Order order = new Order();
+    private static PayStrategy strategy;
 
-        System.out.println(list);
-        System.out.println("Введите номер под которым хотите записать число");
-        index=in.nextInt();
-        System.out.println("Введите число");
-        number=in.nextInt();
-        try {
-            list.add(index-1,number);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println(list);
-        System.out.println("Введите номер числа который хотите изменить");
-        index=in.nextInt();
-        System.out.println("Введите число");
-        number=in.nextInt();
+    static {
+        priceOnProducts.put(1, 2200);
+        priceOnProducts.put(2, 1850);
+        priceOnProducts.put(3, 1100);
+        priceOnProducts.put(4, 890);
+    }
+    public static void main(String[] args) throws IOException {
 
-        try {
-            list.set(index,number);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        Logistic logistic = new Logistic("Морская соль","Вода");
+        logistic.getTransport().deliver();
+        Logistic logistic2 = new Logistic("Настольная игра","Земля");
+        logistic2.getTransport().deliver();
+
+
+        Forest forest = new Forest();
+        for(int i=0; i < Math.floor(TREES_TO_DRAW / TREE_TYPES); i++){
+            forest.plantTree(random(0,CANVAS_SIZE),random(0,CANVAS_SIZE),"Eлка","еловый","");
+            forest.plantTree(random(0,CANVAS_SIZE),random(0,CANVAS_SIZE),"Береза","чернобелый ","с зеленой кроной");
         }
-        System.out.println(list);
-        // System.out.println("Последний элемент "+list.get(list.size()-1));
+        forest.draw();
+        StrategyDemo();
+
+
+}
+    private static int random(int min, int max) {
+        return min + (int) (Math.random() * ((max - min) + 1));
+    }
+    private static void StrategyDemo() throws IOException {
+
+
+            priceOnProducts.put(1, 2200);
+            priceOnProducts.put(2, 1850);
+            priceOnProducts.put(3, 1100);
+            priceOnProducts.put(4, 890);
+        while (!order.isClosed()) {
+            int cost;
+
+            String continueChoice;
+            do {
+                System.out.print("Выберите продукт:" + "\n" +
+                        "1 - Материнская плата" + "\n" +
+                        "2 - Процессор" + "\n"
+                        );
+                int choice = Integer.parseInt(reader.readLine());
+                cost = priceOnProducts.get(choice);
+                System.out.print("Количество: ");
+                int count = Integer.parseInt(reader.readLine());
+                order.setTotalCost(cost * count);
+                System.out.print("Желаете продолжить выбор? Да/Нет: ");
+                continueChoice = reader.readLine();
+            } while (continueChoice.equalsIgnoreCase("Да"));
+
+            if (strategy == null) {
+                System.out.println("Выберите метод оплаты:" + "\n" +
+                        "1 - Киви" + "\n" +
+                        "2 - Кредитная карта");
+                String paymentMethod = reader.readLine();
+
+                // Клиент создаёт различные стратегии на основании
+                // пользовательских данных, конфигурации и прочих параметров.
+                if (paymentMethod.equals("1")) {
+                    strategy = new PayByQuvi();
+                } else {
+                    strategy = new PayByCreditCard();
+                }
 
     }
-//public static void main(String[] args) {
-//    MyLinkedList<Integer> myLinkedList = new MyLinkedList<>();
-//    myLinkedList.add(1);
-//    myLinkedList.add(2);
-//    myLinkedList.add(3);
-//    myLinkedList.add(4);
-//    myLinkedList.add(5);
-//    System.out.println(myLinkedList.toString());
-//    System.out.println(myLinkedList.subList(1,3).toString());
-//    try {
-//        myLinkedList.remove(1);
-//    } catch (OutIndexException e) {
-//        System.out.println(e.getMessage());
-//    }
-//    System.out.println(myLinkedList.toString());
-//}
-}
+}}}

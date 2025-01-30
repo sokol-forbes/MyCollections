@@ -1,4 +1,4 @@
-
+package Collections;
 
 /**
  * Собственная реализация ArrayList<T>
